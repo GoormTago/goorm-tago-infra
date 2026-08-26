@@ -1,0 +1,37 @@
+services:
+  nginx:
+    image: nginx:alpine
+    container_name: goorm-nginx
+    restart: always
+    ports:
+      - "80:80"
+      - "443:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./ssl:/etc/nginx/ssl:ro
+    depends_on:
+      - frontend
+      - backend
+
+  frontend:
+    build:
+      context: ../goorm-tago-frontend
+      dockerfile: Dockerfile_A
+    container_name: goorm-frontend
+    restart: always
+    expose:
+      - "3000"
+
+  backend:
+    build:
+      context: ../goorm-tago-backend
+      dockerfile: Dockerfile_A
+    container_name: goorm-backend
+    restart: always
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - SPRING_DATASOURCE_URL=jdbc:mariadb://mysql.qook.io:3306/${DB_NAME}
+      - SPRING_DATASOURCE_USERNAME=${DB_USER}
+      - SPRING_DATASOURCE_PASSWORD=${DB_PASSWORD}
+    expose:
+      - "8080"

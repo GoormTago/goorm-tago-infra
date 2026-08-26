@@ -1,0 +1,14 @@
+# 환경 변수 파일 제외
+.env
+.env.local
+
+# SSL/TLS 인증서 및 개인키 제외
+ssl/
+*.pem
+*.key
+*.crt
+*.p12
+
+# OS/에디터 임시 파일
+.DS_Store
+*.log
